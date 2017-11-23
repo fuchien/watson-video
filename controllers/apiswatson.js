@@ -52,7 +52,7 @@ function ApisWatsonController() {
         let document_obj = {
             environment_id: '82e4652e-e050-445a-8576-e8b09642e6e2',
             collection_id: '3af14411-288c-45d8-bffb-bdf3705cd3eb',
-            document_id: '2ac496e0-322f-41c7-a93f-039367a48e12'
+            document_id: 'b7bf1ae8-8a59-4d87-86d0-45a2a1d22979'
         };
         
         discovery.deleteDocument(document_obj, (error, data) => {
