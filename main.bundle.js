@@ -437,7 +437,6 @@ var _a, _b, _c, _d;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -450,12 +449,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var HomeService = (function () {
     function HomeService(http) {
         this.http = http;
-        // private url: string = `http://localhost:3001/apiswatson/trechos`
-        this.url = __WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].api_url;
+        // private url: string = `http://localhost:3001`
+        this.url = "https://watson-video.herokuapp.com";
     }
     HomeService.getTimeStamp = function () {
         return this.timeStamp;
