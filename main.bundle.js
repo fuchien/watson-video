@@ -488,7 +488,7 @@ var _a;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
 var environment = {
     production: true,
-    api_url: "http://watson-video.herokuapp.com"
+    api_url: "https://watson-video.herokuapp.com"
 };
 //# sourceMappingURL=environment.js.map
 
