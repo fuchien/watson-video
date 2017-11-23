@@ -453,7 +453,8 @@ var HomeService = (function () {
     function HomeService(http) {
         this.http = http;
         // private url: string = `http://localhost:3001`
-        this.url = "https://watson-video.herokuapp.com";
+        // private url: string = `https://watson-video.herokuapp.com`
+        this.url = "";
     }
     HomeService.getTimeStamp = function () {
         return this.timeStamp;
