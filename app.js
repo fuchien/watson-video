@@ -6,7 +6,7 @@ const defaultJson = require('./config/default.json')
 const port = process.env.PORT || 3001
 const app = express()
 
-app.use(express.static(path.join(__dirname, 'angular4-src/dist')))
+app.use(express.static(path.join(__dirname, 'dist')))
 app.use("/audios", express.static(path.join(__dirname, 'audios')));
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
 app.use('/', require('./routes'))
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'angular4-src/dist/index.html'))
+    res.sendFile(path.join(__dirname, 'dist/index.html'))
 })
 
 app.listen(port, () => {
