@@ -37,6 +37,20 @@ function ApisWatsonController() {
         });
     }
 
+    this.processarAudio = async (req, res, next) => {
+
+        let audio = await decodebase64(req.body.base, req.body.name)
+        // let audios = fs.readdirSync('./audios/')
+        
+        // for(let audio in audios) {
+
+        //     await transformToText(audios[audio])
+        // }
+        await transformToText(audio)
+
+        res.status(200).json('Sucess to process')
+    }
+
     this.uploadToDiscovery = async (req, res, next) => {
 
         let audios = fs.readdirSync('./audios/')
@@ -59,6 +73,17 @@ function ApisWatsonController() {
 
             console.log(JSON.stringify(data, null, 2));
         });
+    }
+
+    function decodebase64(encodedfile, filename) {
+
+        return new Promise((resolve, reject) => {
+
+            const bitmap = encodedfile
+            const decodedString = new Buffer(bitmap, 'base64');
+            fs.writeFileSync((path.join(__dirname, `../audios/${filename.substring(0, filename.length - 4)}.mp3`)), decodedString);
+            resolve(`${filename.substring(0, filename.length - 4)}.mp3`)
+        })
     }
 
     function transformToText(audio) {

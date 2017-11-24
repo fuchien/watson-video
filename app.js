@@ -9,8 +9,8 @@ const app = express()
 app.use(express.static(path.join(__dirname, 'dist')))
 app.use("/audios", express.static(path.join(__dirname, 'audios')));
 
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
