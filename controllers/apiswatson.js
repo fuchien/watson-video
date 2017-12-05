@@ -2,6 +2,8 @@ const SpeechToTextV1 = require('watson-developer-cloud/speech-to-text/v1');
 const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
 const fs = require('fs');
 const path = require('path')
+const ffmpeg = require('fluent-ffmpeg')
+// const ffmpeg = require('ffmpeg')
 
 const defaultJson = require('../config/default.json')
 const client = require('../services/object-storage')
@@ -40,15 +42,38 @@ function ApisWatsonController() {
     this.processarAudio = async (req, res, next) => {
 
         let audio = await decodebase64(req.body.base, req.body.name)
-        // let audios = fs.readdirSync('./audios/')
-        
-        // for(let audio in audios) {
 
-        //     await transformToText(audios[audio])
-        // }
+        await convert(`./videos/${audio}.mp4`, `./audios/${audio}.mp3`)
         await transformToText(audio)
 
         res.status(200).json('Sucess to process')
+    }
+
+    this.getAllVideos = (req, res, next) => {
+
+        fs.readdir(path.join(__dirname, '../videos-processed/'), (err, videos) => {
+
+            if (err) {
+
+                res.status(400).json('Fail to get videos!')
+                return
+            }
+            res.status(200).json(videos)
+        })
+    }
+
+    this.removerVideo = (req, res, next) => {
+
+        fs.unlink(path.join(__dirname, '../videos-processed/' + req.params.name), (err) => {
+
+            if (err) {
+
+                res.status(400).json('Fail to delete video!')
+                return
+            }
+
+            res.status(200).json('Success to delete video!')
+        })
     }
 
     this.uploadToDiscovery = async (req, res, next) => {
@@ -66,7 +91,7 @@ function ApisWatsonController() {
         let document_obj = {
             environment_id: '82e4652e-e050-445a-8576-e8b09642e6e2',
             collection_id: '3af14411-288c-45d8-bffb-bdf3705cd3eb',
-            document_id: 'b7bf1ae8-8a59-4d87-86d0-45a2a1d22979'
+            document_id: '5d7fa45d-48e9-4399-a290-32ccd6f360f7'
         };
         
         discovery.deleteDocument(document_obj, (error, data) => {
@@ -75,14 +100,33 @@ function ApisWatsonController() {
         });
     }
 
+    function convert(input, output) {
+        
+        return new Promise((resolve, reject) => {
+            
+            let proc = new ffmpeg({source:input})
+                .setFfmpegPath('./ffmpeg')
+                .toFormat('mp3')
+                .on('end', function() {
+                    console.log('file has been converted successfully');
+                    resolve()
+                })
+                .on('error', function(err) {
+                    console.log('an error happened: ' + err.message);
+                    reject()
+                })
+                .saveToFile(output);
+        })
+    }
+
     function decodebase64(encodedfile, filename) {
 
         return new Promise((resolve, reject) => {
 
             const bitmap = encodedfile
             const decodedString = new Buffer(bitmap, 'base64');
-            fs.writeFileSync((path.join(__dirname, `../audios/${filename.substring(0, filename.length - 4)}.mp3`)), decodedString);
-            resolve(`${filename.substring(0, filename.length - 4)}.mp3`)
+            fs.writeFileSync((path.join(__dirname, `../videos/${filename.substring(0, filename.length - 4)}.mp4`)), decodedString);
+            resolve(`${filename.substring(0, filename.length - 4)}`)
         })
     }
 
@@ -98,7 +142,7 @@ function ApisWatsonController() {
 
             let params = {
                 model: 'en-US_BroadbandModel',
-                audio: fs.createReadStream('audios/' + audio),
+                audio: fs.createReadStream('audios/' + audio + '.mp3'),
                 content_type: 'audio/mp3',
                 timestamps: true,
                 word_alternatives_threshold: 0.9,
@@ -110,11 +154,8 @@ function ApisWatsonController() {
             let recognizeStream = speech_to_text.createRecognizeStream(params);
             
             // Pipe in the audio.
-            console.log(fs.createReadStream('audios/' + audio).path)
-            fs.createReadStream('audios/' + audio).pipe(recognizeStream);
-
-            // Pipe out the transcription to a file.
-            let fileName = audio.substring(0, audio.length - 4);
+            console.log(fs.createReadStream('audios/' + audio + '.mp3').path)
+            fs.createReadStream('audios/' + audio + '.mp3').pipe(recognizeStream);
             
             // Get strings instead of buffers from 'data' events.
             recognizeStream.setEncoding('utf8');
@@ -122,13 +163,15 @@ function ApisWatsonController() {
             // Listen for events.
             recognizeStream.on('results', function(event) {
                 
-                // recognizeStream.pipe(fs.createWriteStream(path.join(__dirname, `../texts/${fileName}.json`)));
-                fs.writeFile(path.join(__dirname, `../texts/${fileName}.json`), JSON.stringify(event), (err, data) => {
+                if (event.results[0].final == true && event.result_index == 1) {
 
-                    if (err) return
-
-                    onEvent('Results:', event);
-                });
+                    fs.writeFile(path.join(__dirname, `../texts/${audio}.json`), JSON.stringify(event), (err, data) => {
+    
+                        if (err) return
+    
+                        onEvent('Results:', event);
+                    });
+                }
             });
             recognizeStream.on('data', function(event) {
 
@@ -142,7 +185,7 @@ function ApisWatsonController() {
             recognizeStream.on('close', async function(event) {
 
                 onEvent('Close:', event); 
-                await moveToDiscovery(fileName)
+                await moveToDiscovery(audio)
                 resolve()
             });
             recognizeStream.on('speaker_labels', function(event) {});
@@ -191,29 +234,41 @@ function ApisWatsonController() {
 
         return new Promise((resolve, reject) => {
 
-            client.createContainer({
-                name: 'file'
-            }, (err, container) => {
+            let video = (path.join(__dirname, `../videos/` + audioName + '.mp4'))
+            let videoProcessed = (path.join(__dirname, `../videos-processed/` + audioId + '.mp4'))
+            fs.rename(video, videoProcessed, (err) => {
                 if (err) {
-                    reject(err);
-                    return
+
+                    throw err;
+                    reject()
                 }
-                else {
-                    let myFile = fs.createReadStream(path.join(__dirname, `../audios/` + audioName + '.mp3'));
-                    let upload = client.upload({      
-                        container: container.name,
-                        remote: audioId + '.mp3'
-                    });
-                    upload.on('error', function (err) {
-                        console.log(err);
-                    });
-                    upload.on('success', function (fil) {
-                        console.log('success to Upload');
-                    });
-                    myFile.pipe(upload);
-                }
+                console.log('Move complete.');
                 resolve()
             });
+
+            // client.createContainer({
+            //     name: 'file'
+            // }, (err, container) => {
+            //     if (err) {
+            //         reject(err);
+            //         return
+            //     }
+            //     else {
+            //         let myFile = fs.createReadStream(path.join(__dirname, `../videos/` + audioName + '.mp4'));
+            //         let upload = client.upload({
+            //             container: container.name,
+            //             remote: audioId + '.mp4'
+            //         });
+            //         upload.on('error', function (err) {
+            //             console.log(err);
+            //         });
+            //         upload.on('success', function (fil) {
+            //             console.log('success to Upload');
+            //         });
+            //         myFile.pipe(upload);
+            //     }
+                // resolve()
+            // });
         })
     }
 }

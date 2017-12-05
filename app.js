@@ -8,6 +8,7 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, 'dist')))
 app.use("/audios", express.static(path.join(__dirname, 'audios')));
+app.use("/videos-processed", express.static(path.join(__dirname, 'videos-processed')));
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
