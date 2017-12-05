@@ -421,7 +421,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var HomeService = (function () {
     function HomeService(http) {
         this.http = http;
-        this.url = "http://localhost:3001";
+        // private url: string = `http://localhost:3001`
+        this.url = "https://watson-video.herokuapp.com";
     }
     HomeService.getTimeStamp = function () {
         return this.timeStamp;
