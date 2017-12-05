@@ -632,7 +632,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var VideosComponent = (function () {
-    // private url: string = `https://watson-video.herokuapp.com`
     // private url: string = ``
     function VideosComponent(dialog, homeService) {
         this.dialog = dialog;
@@ -640,7 +639,8 @@ var VideosComponent = (function () {
         this.videos = [];
         this.processando = false;
         this.fileName = 'Choose 1 file';
-        this.url = "http://localhost:3001";
+        // private url: string = `http://localhost:3001`
+        this.url = "https://watson-video.herokuapp.com";
     }
     VideosComponent.prototype.ngOnInit = function () {
         this.buscarVideos();
