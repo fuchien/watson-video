@@ -559,7 +559,7 @@ var SearchComponent = (function () {
                         }
                     });
                     // this.videoUrl = `https://dal.objectstorage.open.softlayer.com/v1/AUTH_07a5d8e900744943b109ea40561d202d/file/${resp.results[0].id}.mp4`
-                    _this.videoUrl = "http://localhost:3001/videos-processed/" + resp.results[0].id + ".mp4";
+                    _this.videoUrl = "/videos-processed/" + resp.results[0].id + ".mp4";
                     return;
                 }
                 _this.openDialog('Não tem nenhum conteúdo!!');
