@@ -660,7 +660,7 @@ var VideosComponent = (function () {
             res.map(function (video) {
                 var videos = {
                     videoName: video,
-                    videoUrl: "/" + video
+                    videoUrl: "/videos-processed/" + video
                 };
                 _this.videos.push(videos);
             });
