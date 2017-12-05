@@ -431,13 +431,13 @@ var HomeService = (function () {
         this.timeStamp = time;
     };
     HomeService.prototype.buscarTodosVideos = function () {
-        return this.http.get(this.url + "/apiswatson/allvideos")
+        return this.http.get("https://watson-video.herokuapp.com/apiswatson/allvideos")
             .map(function (res) { return res.json(); });
     };
     HomeService.prototype.buscarVideos = function (data) {
         var body = JSON.stringify({ data: data });
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-type': 'application/json' });
-        return this.http.post(this.url + '/apiswatson/trechos', body, { headers: headers })
+        return this.http.post("https://watson-video.herokuapp.com" + '/apiswatson/trechos', body, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     HomeService.prototype.enviarAudio = function (data) {
@@ -447,7 +447,7 @@ var HomeService = (function () {
             .map(function (res) { return res.json(); });
     };
     HomeService.prototype.removerVideo = function (video) {
-        return this.http.delete(this.url + '/apiswatson/' + video)
+        return this.http.delete("https://watson-video.herokuapp.com" + '/apiswatson/' + video)
             .map(function (res) { return res.json(); });
     };
     return HomeService;
@@ -660,7 +660,7 @@ var VideosComponent = (function () {
             res.map(function (video) {
                 var videos = {
                     videoName: video,
-                    videoUrl: _this.url + "/videos-processed/" + video
+                    videoUrl: "https://watson-video.herokuapp.com/videos-processed/" + video
                 };
                 _this.videos.push(videos);
             });
