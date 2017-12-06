@@ -1,0 +1,3 @@
+[submodule ".\\angular4-src\\"]
+	path = .\\angular4-src\\
+	url = git@github.ibm.com:fuchien/watson-video.git

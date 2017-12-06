@@ -1,0 +1,37 @@
+
+<div class="right">
+  <div class="search">
+    <div class="upload" *ngIf="!processando">
+      <div class="filename">
+        {{ fileName }}
+      </div>
+      <div class="buttons">
+        <label class="fileContainer">
+          <button mat-fab color="warn" class="buttonFile"><mat-icon matSuffix>attach_file</mat-icon></button>
+          <input type="file" (change)="onFileChange($event)"/>
+        </label>
+        <button mat-raised-button color="primary" (click)="processFile()">Process</button>
+      </div>
+    </div>
+    <mat-spinner *ngIf="processando"></mat-spinner>
+  </div>
+
+  <div class="videos">
+    <ul class="ul_videos">
+      <li class="li_videos" *ngFor="let video of videos">
+        <mat-card class="example-card">
+          <mat-card-content class="card-content">
+            <video controls="controls" autoplay="false" class="video" appAudio matTooltip="{{ video.videoName }}">
+              <source src="{{ video.videoUrl }}" type="video/mp4"/>
+            </video>
+          </mat-card-content>
+          <mat-card-actions class="actions">
+            <button mat-icon-button color="warn" matTooltip="Remover" (click)="removerVideo(video.videoName)">
+              <mat-icon class="mat-24">clear</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </li>
+    </ul>
+  </div>
+</div>

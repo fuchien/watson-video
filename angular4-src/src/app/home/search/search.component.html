@@ -1,0 +1,21 @@
+<div class="chat">
+  <div class="example-form" *ngIf="!inProgress">
+    <form [formGroup]="myForm" (ngSubmit)="enviarDados(myForm.value, myForm.valid)" class="form">
+      <mat-form-field class="example-full-width">
+        <input matInput autofocus formControlName="trecho" 
+        class="form-control"
+        placeholder="Digite o trecho" >
+        <mat-icon matSuffix>mode_edit</mat-icon>
+        <mat-error *ngIf="myForm.controls.trecho.invalid">
+          É <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="progress">
+    <mat-progress-bar mode="indeterminate" *ngIf="inProgress"></mat-progress-bar>
+  </div>
+  <video controls="controls" autoplay="false" *ngIf="videoUrl" class="video" appAudio matTooltip="{{ inputDigitado }}">
+    <source src="{{ videoUrl }}" type="video/mp4"/>
+  </video>
+</div>

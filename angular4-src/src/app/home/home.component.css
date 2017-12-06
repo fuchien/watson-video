@@ -1,0 +1,46 @@
+.toolbar {
+  min-height: 10vh;
+  max-height: 10vh;
+}
+
+.example-sidenav {
+  padding: 20px;
+}
+
+.example-container {
+  min-width: 98vw;
+  max-width: 98vw;
+  min-height: 90vh;
+}
+
+.example-sidenav {
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  min-height: 90vh;
+  overflow: hidden;
+  max-width: 98vw;
+}
+
+.example-sidenav-content {
+  min-width: 5vw;
+  max-width: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.example-sidenav-content button {
+  padding: 0;
+  height: 100%;
+  max-width: 100%;
+}
+
+.example-sidenav-right {
+  min-width: 90vw;
+  max-width: 90vw;
+  display: flex;
+  justify-content: center;
+}
