@@ -437,17 +437,17 @@ var HomeService = (function () {
     HomeService.prototype.buscarVideos = function (data) {
         var body = JSON.stringify({ data: data });
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-type': 'application/json' });
-        return this.http.post("https://watson-video.herokuapp.com" + '/apiswatson/trechos', body, { headers: headers })
+        return this.http.post('https://watson-video.herokuapp.com/apiswatson/trechos', body, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     HomeService.prototype.enviarAudio = function (data) {
         var body = JSON.stringify(data);
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-type': 'application/json' });
-        return this.http.post(this.url + '/apiswatson/audio', body, { headers: headers })
+        return this.http.post('https://watson-video.herokuapp.com/apiswatson/audio', body, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     HomeService.prototype.removerVideo = function (video) {
-        return this.http.delete("https://watson-video.herokuapp.com" + '/apiswatson/' + video)
+        return this.http.delete('https://watson-video.herokuapp.com/apiswatson/' + video)
             .map(function (res) { return res.json(); });
     };
     return HomeService;
@@ -559,7 +559,7 @@ var SearchComponent = (function () {
                         }
                     });
                     // this.videoUrl = `https://dal.objectstorage.open.softlayer.com/v1/AUTH_07a5d8e900744943b109ea40561d202d/file/${resp.results[0].id}.mp4`
-                    _this.videoUrl = "http://localhost:3001/videos-processed/" + resp.results[0].id + ".mp4";
+                    _this.videoUrl = "https://watson-video.herokuapp.com/videos-processed/" + resp.results[0].id + ".mp4";
                     return;
                 }
                 _this.openDialog('Não tem nenhum conteúdo!!');
