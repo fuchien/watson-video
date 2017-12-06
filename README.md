@@ -1,4 +1,4 @@
-# Videoapp
+# Watson videoapp
 
 You can see -----> [DEMO](https://fuchien.github.io/watson-video/) <-----
 
@@ -19,5 +19,4 @@ Then start a dev frontend server on localhost:4200
 
 ---
     cd angular4-src
----
     npm start
